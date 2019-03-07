@@ -7,8 +7,8 @@
 
 ## grid Controls
 
-- grid pads to change pitch
-- Double tap to add a rest
+- Tap grid pads to set/change pitch.
+- Double tap to add a rest.
 
 ## Front Controls
 
@@ -17,7 +17,7 @@
 - ENC 3: sets scale
 - KEY 2: randomizes pattern
 - KEY 3: pauses/restarts
-
+-
 
 - MIDI IN: transposes key
 - MIDI OUT: to external synths
