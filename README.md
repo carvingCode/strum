@@ -1,6 +1,6 @@
 # strum
 
-Plucky little pattern sequencer for monome norns.
+Plucky little pattern sequencer for monome norns. Updated for norns v2.x.
 
 "Full moon shines so bright, Stars in its vicinity, All but disappear"
 
