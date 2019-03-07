@@ -17,7 +17,8 @@
 - ENC 3: sets scale
 - KEY 2: randomizes pattern
 - KEY 3: pauses/restarts
--
+
+## MIDI
 
 - MIDI IN: transposes key
 - MIDI OUT: to external synths
