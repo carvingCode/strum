@@ -20,7 +20,6 @@
 
 ## MIDI
 
-- MIDI IN: transposes key
 - MIDI OUT: to external synths
 
 ## Param Settings
