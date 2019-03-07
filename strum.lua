@@ -19,7 +19,6 @@
 -- KEY 2: randomizes pattern
 -- KEY 3: pauses/restarts
 --
--- MIDI IN: transposes key
 -- MIDI OUT: to external synths
 --
 -- Param Settings
@@ -51,9 +50,10 @@ local steps = {}
 
 local playmode = {"Onward","Aft","Sway","Joy"}
 local out_options = {"Audio", "MIDI", "Audio + MIDI"}
-local grid_device
-local midi_in_device
-local midi_out_device
+
+local grid_device = grid.connect()
+
+local midi_out_device = midi.connect(2)
 local midi_out_channel
 
 local playchoice = 1
@@ -67,11 +67,6 @@ local k3_state = 0
 
 local lightshow = 1
 
-grid_device = grid.connect(1)
-
-midi_in_device = midi.connect(1)
-midi_out_device = midi.connect(2)
-
 --local mode = math.random(#music.SCALES)
 local mode = 17
 local scale = music.generate_scale_of_length(60,music.SCALES[mode].name,8)
@@ -84,11 +79,10 @@ clk_midi.event = clk.process_midi
 local function all_notes_kill()
   
   -- Audio engine out
-  --engine.noteKillAll()
+  --engine.noteKillAll(). ??
   
   -- MIDI out
   if (params:get("output") == 2 or params:get("output") == 3) then
-
       midi_out_device:note_off(a, 96, midi_out_channel)
   end
   note_playing = nil
@@ -99,9 +93,8 @@ local function reset_pattern()
 	playchoice = 1
 	position = 0
 	note_playing = nil
-  clk:reset()
+	clk:reset()
 end
-
 
 --
 -- each step
@@ -176,7 +169,7 @@ function init()
 	params:add_option("light_show", "Light Show", { "yes", "no" }, lightshow or 2 and 1)
 	params:set_action("light_show", function(x) if x == 1 then lightshow = 1 else lightshow = 2 end end)
 	
-	params:add_separator()
+	params:add_separator("Clock")
 	
 	params:add_option("clock", "Clock", {"internal", "external"}, clk.external or 2 and 1)
 	params:set_action("clock", function(x) clk:clock_source_change(x) end)
@@ -207,11 +200,6 @@ function init()
     	action = function(value)
 		all_notes_kill()
 		midi_out_channel = value
-    end}
-
-	params:add{type = "number", id = "clock_midi_in_device", name = "Clock MIDI In Device", min = 1, max = 4, default = 1,
-    	action = function(value)
-		midi_in_device = midi.connect(value)
     end}
 
     params:add_separator()
@@ -262,7 +250,6 @@ end
 -- grid functions
 --
 
-
 grid_device.key = function(x,y,z)
     --print(x,y,z)
     if z == 1 then
@@ -276,7 +263,6 @@ grid_device.key = function(x,y,z)
     redraw()
 end
 
-
 function grid_redraw()
     grid_device:all(0)
     for i=1,16 do
@@ -287,7 +273,6 @@ function grid_redraw()
             	end
         	end
         else
-        
         	grid_device:led(i,steps[i],i==position and 12 or 4)
         end
     end
@@ -343,20 +328,6 @@ function enc(n,d)
         scale = music.generate_scale_of_length(60,music.SCALES[mode].name,8)
     end
     redraw()
-end
-
-
-
-
-
---
--- midi functions
---
-midi_in_device.event = function(data)
-    local d = midi_in_device:to_msg(data)
-    if d.type == "note_on" then
-        transpose = d.note - 60
-    end
 end
 
 --
