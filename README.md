@@ -12,20 +12,20 @@ plucky little pattern sequencer for monome norns.
 
 ## Front Controls
 
- ENC 1: adjusts direction
- ENC 2: adjusts tempo
- ENC 3: sets scale
- KEY 2: randomizes pattern
- KEY 3: pauses/restarts
+- ENC 1: adjusts direction
+- ENC 2: adjusts tempo
+- ENC 3: sets scale
+- KEY 2: randomizes pattern
+- KEY 3: pauses/restarts
 
- MIDI IN: transposes key
- MIDI OUT: to external synths
+- MIDI IN: transposes key
+- MIDI OUT: to external synths
 
 ## Param Settings
 
- Light Show or single light
- Set grid and MIDI device
- Set MIDI channel
- Various clock settings
- Synth params can be changed
- -- beware the high ends!!!
+- Light Show or single light
+- Set grid and MIDI device
+- Set MIDI channel
+- Various clock settings
+- Synth params can be changed
+-- beware the high ends!!!
