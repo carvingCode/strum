@@ -18,6 +18,7 @@ plucky little pattern sequencer for monome norns.
 - KEY 2: randomizes pattern
 - KEY 3: pauses/restarts
 
+
 - MIDI IN: transposes key
 - MIDI OUT: to external synths
 
@@ -27,5 +28,4 @@ plucky little pattern sequencer for monome norns.
 - Set grid and MIDI device
 - Set MIDI channel
 - Various clock settings
-- Synth params can be changed
--- beware the high ends!!!
+- Synth params can be changed (beware the high ends!!!)
