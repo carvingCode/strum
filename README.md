@@ -1,6 +1,6 @@
-# strum
+# strum: a plucky little pattern sequencer
 
-Plucky little pattern sequencer for monome norns. Updated for norns v2.x.
+For monome norns. Updated for norns v2.x.
 
 "Full moon shines so bright, Stars in its vicinity, All but disappear"
 
