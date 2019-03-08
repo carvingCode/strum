@@ -26,6 +26,7 @@
 
 - Light Show or single light
 - Set grid and MIDI device
+- Set grid rotation
 - Set MIDI channel
 - Various clock settings
 - Synth params can be changed (beware the high ends!!!)
