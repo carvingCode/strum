@@ -25,6 +25,7 @@
 -- --
 -- Light Show or single light
 -- Set grid and MIDI device
+-- Set grid rotation
 -- Set MIDI channel
 -- Various clock settings
 -- Synth params can be changed
@@ -34,7 +35,7 @@
 -- Based on norns study #4
 --
 -- @carvingcode (Randy Brown)
--- v0.7d_0307 (for v2.x)
+-- v0.7d_0308 (for v2.x)
 
 
 
@@ -186,6 +187,14 @@ function init()
 		grid_device:all(0)
 		grid_device:refresh()
 		grid_device = grid.connect(value)
+    end}
+    
+    params:add{type = "number", id = "grid_rotation", name = "Grid Rotation", min = 0, max = 3, default = 0, 
+		action = function(value)
+		grid_device:all(0)
+		grid_device:rotation(value)
+		grid_device:refresh()
+		--grid_device = grid.rotation(value)
     end}
   
 	params:add{type = "option", id = "output", name = "Output", options = out_options, 
