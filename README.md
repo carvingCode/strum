@@ -7,7 +7,7 @@
 
 ## grid Controls
 
-- Tap grid pads to set/change pitch.
+- Tap grid pads to set/change pitch. Or randomize them.
 - Double tap to add a rest.
 
 ## Front Controls
