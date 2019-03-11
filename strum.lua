@@ -35,15 +35,24 @@
 -- Based on norns study #4
 --
 -- @carvingcode (Randy Brown)
--- v0.7d_0308 (for v2.x)
+-- v0.7d_0310 (for v2.x)
 
 
 
 engine.name = 'KarplusRings'
 
+local UI = require "ui"
 local cs = require 'controlspec'
 local music = require 'musicutil'
 local beatclock = require 'beatclock'
+local h = require 'halfsecond'
+
+
+local SCREEN_FRAMERATE = 15
+local screen_refresh_metro
+local screen_dirty = true
+
+local pages
 
 local name = ":: strum :: "
 
@@ -58,6 +67,7 @@ local midi_out_device = midi.connect(2)
 local midi_out_channel
 
 local playchoice = 1
+local pattern_len = 16
 local position = 1
 local note_playing = nil
 local prev_note = 0
@@ -91,9 +101,9 @@ end
 
 
 local function reset_pattern()
-	playchoice = 1
-	position = 0
-	note_playing = nil
+	--playchoice = 1
+	--position = 0
+	--note_playing = nil
 	clk:reset()
 end
 
@@ -104,26 +114,29 @@ function handle_step()
 
     --print(playmode[playchoice])
     if playmode[playchoice] == "Onward" then
-        position = (position % 16) + 1
+        position = (position % pattern_len) + 1
+        
     elseif playmode[playchoice] == "Aft" then
         position = position - 1
         if position == 0 then
-            position = 16
+            position = pattern_len
         end
     elseif playmode[playchoice] == "Sway" then
         if direction == 1 then
-            position = (position % 16) + 1
-            if position == 16 then
+            position = (position % pattern_len) + 1
+            if position == pattern_len then
                 direction = 0
             end
         else
-            position = position - 1
+	        if pattern_len > 1 then
+            	position = position - 1
+            end
             if position == 1 then
                 direction = 1
             end
         end
     else
-        position = math.random(1,16)
+        position = math.random(1,pattern_len)
     end
 
     if steps[position] ~= 0 then
@@ -154,12 +167,27 @@ end
 --
 function init()
 
+  screen.aa(1)
+  
+  -- Init UI
+  pages = UI.Pages.new(1, 3)
+  
+  -- Start drawing to screen
+  screen_refresh_metro = metro.init()
+  screen_refresh_metro.event = function()
+    if screen_dirty then
+      screen_dirty = false
+      redraw()
+    end
+  end
+  screen_refresh_metro:start(1 / SCREEN_FRAMERATE)
+  
     for i=1,16 do
         table.insert(steps,math.random(0,8))
     end
     
-    grid_redraw()
-    redraw()
+    --grid_redraw()
+
 
     clk.on_step = handle_step
     clk.on_stop = reset_pattern
@@ -194,7 +222,6 @@ function init()
 		grid_device:all(0)
 		grid_device:rotation(value)
 		grid_device:refresh()
-		--grid_device = grid.rotation(value)
     end}
   
 	params:add{type = "option", id = "output", name = "Output", options = out_options, 
@@ -252,6 +279,7 @@ function init()
 
     clk:start()
 
+	h.init()
 end
 
 
@@ -274,7 +302,7 @@ end
 
 function grid_redraw()
     grid_device:all(0)
-    for i=1,16 do
+    for i=1,pattern_len do
 	    if lightshow == 1 then
         	if steps[i] ~= 0 then
             	for j=0,7 do
@@ -326,17 +354,34 @@ end
 --
 -- norns encoders
 --
-function enc(n,d)
-    if n == 1 then          -- sequence direction
-        playchoice = util.clamp(playchoice + d, 1, #playmode)
-        --print (playchoice)
-    elseif n == 2 then      -- tempo
-        params:delta("bpm",d)
-    elseif n == 3 then      -- scale
-        mode = util.clamp(mode + d, 1, #music.SCALES)
-        scale = music.generate_scale_of_length(60,music.SCALES[mode].name,8)
+function enc(n,delta)
+	
+	if n == 1 then
+    -- Page scroll
+    	pages:set_index_delta(util.clamp(delta, -1, 1), false)
+  	end
+  
+  	if pages.index == 1 then
+	  	
+    	if n == 2 then          -- sequence direction
+        	playchoice = util.clamp(playchoice + delta, 1, #playmode)
+        elseif n == 3 then      -- tempo
+        	params:delta("bpm",delta)
+		end
+		
+   	elseif pages.index == 2 then
+
+    	if n == 2 then      -- scale
+        	mode = util.clamp(mode + delta, 1, #music.SCALES)
+			scale = music.generate_scale_of_length(60,music.SCALES[mode].name,8)
+		elseif n == 3 then
+			pattern_len = util.clamp(pattern_len + delta, 2, 16)
+    	end
+    	
     end
     redraw()
+    
+    screen_dirty = true
 end
 
 --
@@ -344,29 +389,48 @@ end
 --
 function redraw()
     screen.clear()
+    
+    pages:redraw()
+    
+    screen.aa(1)
+    screen.line_width(1)
     screen.move(44,10)
     screen.level(5)
     screen.text(name)
-    screen.move(0,20)
-    screen.text("---------------------------------")
-    screen.move(0,30)
-    screen.level(5)
-    screen.text("Path: ")
-    screen.move(30,30)
-    screen.level(15)
-    screen.text(playmode[playchoice])
-    screen.move(0,40)
-    screen.level(5)
-    screen.text("Tempo: ")
-    screen.move(30,40)
-    screen.level(15)
-    screen.text(params:get("bpm").." bpm")
-    screen.move(0,50)
-    screen.level(5)
-    screen.text("Scale: ")
-    screen.move(30,50)
-    screen.level(15)
-    screen.text(music.SCALES[mode].name)
+    screen.move(0,15)
+    screen.line(127,15)
+    screen.stroke()
+    if pages.index == 1 then
+	  	screen.move(0,30)
+	  	screen.level(5)
+	  	screen.text("Path: ")
+	  	screen.move(30,30)
+	  	screen.level(15)
+	  	screen.text(playmode[playchoice])
+	  	screen.move(0,40)
+		screen.level(5)
+		screen.text("Tempo: ")
+		screen.move(30,40)
+		screen.level(15)
+		screen.text(params:get("bpm").." bpm")
+	elseif pages.index == 2 then
+		screen.move(0,30)
+		screen.level(5)
+		screen.text("Scale: ")
+		screen.move(30,30)
+		screen.level(15)
+		screen.text(music.SCALES[mode].name)
+		screen.move(0,40)
+		screen.level(5)
+		screen.text("Len: ")
+		screen.move(30,40)
+		screen.level(15)
+		screen.text(pattern_len)
+    elseif pages.index == 3 then
+	    screen.move(0,30)
+	    screen.text(":: you are here ::")
+	end
+	
     screen.update()
 end
 
