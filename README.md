@@ -12,7 +12,7 @@
 
 ## Front Controls
 
-Dividied into pages ###new
+Dividied into pages (new)
 
 - ENC 1: chooses page
 
@@ -23,7 +23,7 @@ Dividied into pages ###new
 
 ### Page 2
 - ENC 2: sets scale
-- END 3: sets pattern length ###new
+- END 3: sets pattern length (new)
 
 - KEY 2: randomizes pattern
 - KEY 3: pauses/restarts
@@ -36,11 +36,11 @@ Dividied into pages ###new
 
 - Light Show or single light
 - Set grid and MIDI device
-- Set grid rotation ###new
+- Set grid rotation (new)
 - Set MIDI channel
 - Various clock settings
 - Synth params can be changed (beware the high ends!!!)
--- Delay can be set using "cut1rate" ###new
+-- Delay can be set using "cut1rate" (new)
 
 ###Note:
 
