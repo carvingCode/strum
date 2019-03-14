@@ -10,7 +10,7 @@
 - Tap grid pads to set/change pitch. Or randomize them.
 - Double tap to add a rest.
 
-## Front Controls
+## norns Controls
 
 Dividied into pages (new)
 
@@ -22,19 +22,23 @@ Dividied into pages (new)
 - ENC 3: adjusts tempo
 
 ### Page 2
+- END 2: sets pattern length (new)
+
+### Page 3
 - ENC 2: sets scale
-- END 3: sets pattern length (new)
+- END 3: sets tonic (new)
 
 - KEY 2: randomizes pattern
 - KEY 3: pauses/restarts
 
 ## MIDI
 
+- MIDI IN: clock sync (new)
 - MIDI OUT: to external synths
 
 ## Param Settings
 
-- Light Show or single light
+- Grid display: scatter or bar
 - Set grid and MIDI device
 - Set grid rotation (new)
 - Set MIDI channel
@@ -44,4 +48,4 @@ Dividied into pages (new)
 
 ###Note:
 
-This script is not a finihsed product.  It is pre- version 1.  Feedback on performance and ideas for feature improvements and enhancements are welcome.  Please contact me @carvingcode at https://llllllll.co
+This script is not a finihsed product.  Feedback on performance and improvements and enhancements are welcome.  Please contact me @carvingcode at https://llllllll.co
