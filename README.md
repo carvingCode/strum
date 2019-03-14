@@ -7,7 +7,7 @@
 
 ## grid Controls
 
-- Tap grid pads to set/change pitch. Or randomize them.
+- Tap grid pads to set/change pitch.
 - Double tap to add a rest.
 
 ## norns Controls
@@ -50,4 +50,4 @@ Dividied into pages (new)
 
 ###Note:
 
-This script is not a finihsed product.  Feedback on performance and improvements and enhancements are welcome.  Please contact me @carvingcode at https://llllllll.co
+Feedback on performance and improvements and enhancements is welcome.  Please contact me @carvingcode at https://llllllll.co
