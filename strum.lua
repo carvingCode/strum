@@ -20,17 +20,20 @@
 -- 
 -- Page 1
 -- 
--- ENC 2: adjusts direction
--- ENC 3: adjusts tempo
+-- ENC 2: set scale
+-- ENC 3: set root note (tonic)
 -- 
 -- Page 2
 -- 
--- ENC 2: sets scale
+-- ENC 2: set play order
+-- ENC 3: set BPM (tempo)
 -- 
--- ENC 3: sets pattern length
+-- Page 3:
 -- 
+-- ENC 2: set pattern length
+-- 
+--
 -- KEY 2: randomizes pattern
--- 
 -- KEY 3: pauses/restarts
 -- 
 -- MIDI
@@ -51,7 +54,7 @@
 -- Based on norns study #4
 -- 
 -- @carvingcode (Randy Brown)
--- v0.7d_0313 (for v2.x)
+-- v0.8d_0314 (for v2.x)
 --
 
 
@@ -285,7 +288,10 @@ end)
     	action = function(value)
 		midi_in_device = midi.connect(value)
     end}
-  
+    
+  	params:add_option("clock", "Clock Source", {"Internal", "External"}, clk.external or 2 and 1)
+	params:set_action("clock", function(x) clk:clock_source_change(x) end)
+	
 	params:add{type = "option", id = "clock_out", name = "Clock Out", options = {"Off", "On"}, default = clk.send or 2 and 1,
     	action = function(value)
 		if value == 1 then clk.send = false
@@ -410,8 +416,8 @@ function key(n,z)
             k3_state = 0
         end
     end
-
-    redraw()
+    
+	screen_dirty = true
 end
 
 ---------------------------
@@ -427,33 +433,37 @@ function enc(n,delta)
   
     if pages.index == 1 then
         
-        if n == 2 then           -- sequence direction
-            playchoice = util.clamp(playchoice + delta, 1, #playmode)
-        elseif n == 3 then      -- tempo
-            params:delta("bpm",delta)
-        end
-        
-    elseif pages.index == 2 then
-
-        if n == 2 then       -- pattern length
-            pattern_len = util.clamp(pattern_len + delta, 2, 16)
-        end
-    
-    elseif pages.index == 3 then
-
         if n == 2 then       -- scale
             mode = util.clamp(mode + delta, 1, #music.SCALES)
-            scale = music.generate_scale(48,music.SCALES[mode].name,8)
+            scale = music.generate_scale_of_length(note_num,music.SCALES[mode].name,8)
 
         elseif n == 3 then	-- tonic
 	        
             note_num = util.clamp(note_num + delta, 24, 96)
             tonic = music.note_num_to_name(note_num, 1)
             scale = music.generate_scale_of_length(note_num,music.SCALES[mode].name,8)
-
+                
         end
+        
+        
+    elseif pages.index == 2 then
+
+		if n == 2 then           -- sequence direction
+            playchoice = util.clamp(playchoice + delta, 1, #playmode)
+            
+        elseif n == 3 then      -- tempo
+            params:delta("bpm",delta)
+            
+        end
+    
+    elseif pages.index == 3 then
+
+        if n == 2 then       -- pattern length
+            pattern_len = util.clamp(pattern_len + delta, 2, 16)
+            
+        end
+        
     end
-    redraw()
     
     screen_dirty = true
 end
@@ -478,29 +488,7 @@ function redraw()
     
     if pages.index == 1 then
 	    
-        screen.move(0,30)
-        screen.level(5)
-        screen.text("Path: ")
-        screen.move(30,30)
-        screen.level(15)
-        screen.text(playmode[playchoice])
-        screen.move(0,40)
-        screen.level(5)
-        screen.text("Tempo: ")
-        screen.move(30,40)
-        screen.level(15)
-        screen.text(params:get("bpm").." bpm")
-        
-    elseif pages.index == 2 then
-        screen.move(0,30)
-        screen.level(5)
-        screen.text("Len: ")
-        screen.move(30,30)
-        screen.level(15)
-        screen.text(pattern_len)
-        
-    elseif pages.index == 3 then
-		screen.move(0,30)
+	    screen.move(0,30)
         screen.level(5)
         screen.text("Scale: ")
         screen.move(30,30)
@@ -512,6 +500,35 @@ function redraw()
         screen.move(30,40)
         screen.level(15)
         screen.text(tonic)
+    elseif pages.index == 2 then      
+	    
+        screen.move(0,30)
+        screen.level(5)
+        screen.text("Path: ")
+        screen.move(30,30)
+        screen.level(15)
+        screen.text(playmode[playchoice])
+        screen.move(0,40)
+        screen.level(5)
+        screen.text("Tempo: ")
+        screen.move(30,40)
+        if clk.external then
+        	screen.level(3)
+			screen.text("External")
+		else
+        	screen.level(15)
+			screen.text(params:get("bpm").." bpm")
+        end
+                
+    elseif pages.index == 3 then
+	    
+        screen.move(0,30)
+        screen.level(5)
+        screen.text("Len: ")
+        screen.move(30,30)
+        screen.level(15)
+        screen.text(pattern_len)
+        
     end
     
     screen.update()
