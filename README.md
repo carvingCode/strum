@@ -1,4 +1,4 @@
-# strum
+# Strum
 ## a plucky little pattern sequencer
 
 ### For monome norns. Updated for norns v2.x.
