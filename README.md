@@ -22,11 +22,11 @@ Dividied into pages (new)
 - ENC 3: adjusts tempo
 
 ### Page 2
-- END 2: sets pattern length (new)
+- ENC 2: sets pattern length (new)
 
 ### Page 3
 - ENC 2: sets scale
-- END 3: sets tonic (new)
+- ENC 3: sets tonic (new)
 
 - KEY 2: randomizes pattern
 - KEY 3: pauses/restarts
