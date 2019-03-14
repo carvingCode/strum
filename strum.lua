@@ -65,8 +65,8 @@ local h = require 'halfsecond'
 
 local playmode = {"Onward","Aft","Joy"}
 local out_options = {"Audio", "MIDI", "Audio + MIDI"}
+local grid_display_options = {"Normal", "90 degrees", "180 degrees", "270 degrees"}
 
---local grid_display_options = {["0"] = 0, ["90"] = 1, ["180"] = 2, ["270"] = 3}
 
 -- vars for UI
 local SCREEN_FRAMERATE = 15
@@ -81,6 +81,8 @@ local steps = {}
 local playchoice = 1
 local pattern_len = 16
 local position = 1
+local note_num = 60
+
 
 local note_playing = nil
 local prev_note = 0
@@ -96,8 +98,10 @@ local midi_out_device = midi.connect()
 local midi_out_channel
 
 -- scale vars
+local tonic = music.note_num_to_name(note_num, 1)
 local mode = 5 -- set to dorian
 local scale = music.generate_scale_of_length(60,music.SCALES[mode].name,8)
+--local scale = music.generate_scale(48,music.SCALES[mode].name,1)
 
 -- clock vars
 local clk = beatclock.new()
@@ -191,7 +195,7 @@ end
 -- setup --
 -----------
 function init()
-
+	
 	screen.aa(1)
   
 	-- Init UI
@@ -236,7 +240,7 @@ function init()
     params:add_option("grid_display", "Grid Display", { "Bar", "Scatter" }, grid_display or 1 and 2)
     params:set_action("grid_display", function(x) if x == 1 then grid_display = 1 else grid_display = 2 end end)
   
- --[[ 
+--[[
     params:add_option("grid_rotation", "Grid Rotation", grid_display_options, 0)
     params:set_action("grid_rotation", function(x) 
         grid_device:all(0)
@@ -245,6 +249,14 @@ function init()
     end)       
 --]]
 
+params:add_option("grid_rotation", "Grid Rotation", grid_display_options)
+params:set_action("grid_rotation", function(x) 
+    local val = x - 1
+    grid_device:all(0)
+    grid_device:rotation(val)
+    grid_device:refresh()
+end) 
+--[[
 	-- working, not ideal
     params:add{type = "number", id = "grid_rotation", name = "Grid Rotation", min = 0, max = 3, default = 0, 
 		action = function(value)
@@ -252,7 +264,7 @@ function init()
 		grid_device:rotation(value)
 		grid_device:refresh()
     end}
-
+--]]
     params:add_separator()
     
     params:add{type = "option", id = "output", name = "Output", options = out_options, 
@@ -423,13 +435,23 @@ function enc(n,delta)
         
     elseif pages.index == 2 then
 
-        if n == 2 then       -- scale
-            mode = util.clamp(mode + delta, 1, #music.SCALES)
-            scale = music.generate_scale_of_length(60,music.SCALES[mode].name,8)
-        elseif n == 3 then
+        if n == 2 then       -- pattern length
             pattern_len = util.clamp(pattern_len + delta, 2, 16)
         end
-        
+    
+    elseif pages.index == 3 then
+
+        if n == 2 then       -- scale
+            mode = util.clamp(mode + delta, 1, #music.SCALES)
+            scale = music.generate_scale(48,music.SCALES[mode].name,8)
+
+        elseif n == 3 then	-- tonic
+	        
+            note_num = util.clamp(note_num + delta, 24, 96)
+            tonic = music.note_num_to_name(note_num, 1)
+            scale = music.generate_scale_of_length(note_num,music.SCALES[mode].name,8)
+
+        end
     end
     redraw()
     
@@ -472,20 +494,24 @@ function redraw()
     elseif pages.index == 2 then
         screen.move(0,30)
         screen.level(5)
+        screen.text("Len: ")
+        screen.move(30,30)
+        screen.level(15)
+        screen.text(pattern_len)
+        
+    elseif pages.index == 3 then
+		screen.move(0,30)
+        screen.level(5)
         screen.text("Scale: ")
         screen.move(30,30)
         screen.level(15)
         screen.text(music.SCALES[mode].name)
         screen.move(0,40)
         screen.level(5)
-        screen.text("Len: ")
+        screen.text("Key: ")
         screen.move(30,40)
         screen.level(15)
-        screen.text(pattern_len)
-        
-    elseif pages.index == 3 then
-         screen.move(0,30)
-         screen.text(":: you are here ::")
+        screen.text(tonic)
     end
     
     screen.update()
