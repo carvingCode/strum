@@ -18,15 +18,17 @@ Dividied into pages (new)
 
 ### Page 1
 
+- ENC 2: sets scale
+- ENC 3: sets tonic (new)
+
+### Page 2
+
 - ENC 2: adjusts direction
 - ENC 3: adjusts tempo
 
-### Page 2
-- ENC 2: sets pattern length (new)
-
 ### Page 3
-- ENC 2: sets scale
-- ENC 3: sets tonic (new)
+
+- ENC 2: sets pattern length (new)
 
 ### Keys
 - KEY 1: param and system menus
