@@ -28,8 +28,8 @@ Dividied into pages (new)
 - ENC 2: sets scale
 - ENC 3: sets tonic (new)
 
-- KEY 2: randomizes pattern
-- KEY 3: pauses/restarts
+KEY 2: randomizes pattern
+KEY 3: pauses/restarts
 
 ## MIDI
 
