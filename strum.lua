@@ -66,7 +66,7 @@ local music = require 'musicutil'
 local beatclock = require 'beatclock'
 local h = require 'halfsecond'
 
-local playmode = {"Onward","Aft","Joy"}
+local playmode = {"Onward","Aft", "Sway", "Joy"}
 local out_options = {"Audio", "MIDI", "Audio + MIDI"}
 local grid_display_options = {"Normal", "90 degrees", "180 degrees", "270 degrees"}
 
@@ -131,8 +131,15 @@ end
 -------------------
 local function reset_pattern()
     --playchoice = 1
-    --position = 1
-    --note_playing = nil
+    
+    if playmode[playchoice] == "Aft"  then
+    	position = 17
+    elseif playmode[playchoice] == "Sway"  then
+    	position = 8
+    else
+    	position = 0
+    end
+    note_playing = nil
     clk:reset()
 end
 
@@ -152,7 +159,6 @@ function handle_step()
         
         -- 	TODO fix math
         
-        --[[
     elseif playmode[playchoice] == "Sway" then
         if direction == 1 then
             position = (position % pattern_len) + 1
@@ -167,7 +173,7 @@ function handle_step()
                 direction = 1
             end
         end
-        --]]
+
     else -- random step position
         position = math.random(1,pattern_len)
     end
@@ -178,6 +184,7 @@ function handle_step()
           -- Audio engine out
         if params:get("output") == 1 or params:get("output") == 3 then
                 engine.amp(vel)
+                print (position)
                 engine.hz(music.note_num_to_freq(scale[steps[position]] + transpose))
         end
         
@@ -242,32 +249,15 @@ function init()
     
     params:add_option("grid_display", "Grid Display", { "Bar", "Scatter" }, grid_display or 1 and 2)
     params:set_action("grid_display", function(x) if x == 1 then grid_display = 1 else grid_display = 2 end end)
-  
---[[
-    params:add_option("grid_rotation", "Grid Rotation", grid_display_options, 0)
-    params:set_action("grid_rotation", function(x) 
-        grid_device:all(0)
-        grid_device:rotation(x)
-        grid_device:refresh()
-    end)       
---]]
 
-params:add_option("grid_rotation", "Grid Rotation", grid_display_options)
-params:set_action("grid_rotation", function(x) 
-    local val = x - 1
-    grid_device:all(0)
-    grid_device:rotation(val)
-    grid_device:refresh()
-end) 
---[[
-	-- working, not ideal
-    params:add{type = "number", id = "grid_rotation", name = "Grid Rotation", min = 0, max = 3, default = 0, 
-		action = function(value)
+	params:add_option("grid_rotation", "Grid Rotation", grid_display_options)
+	params:set_action("grid_rotation", function(x) 
+    	local val = x - 1
 		grid_device:all(0)
-		grid_device:rotation(value)
+		grid_device:rotation(val)
 		grid_device:refresh()
-    end}
---]]
+	end) 
+
     params:add_separator()
     
     params:add{type = "option", id = "output", name = "Output", options = out_options, 
@@ -373,7 +363,7 @@ end
 function grid_redraw()
 	
     grid_device:all(0)
-    for i=1,pattern_len do
+    for i=1, pattern_len do
          if grid_display == 1 then
             if steps[i] ~= 0 then
                 for j=0,7 do
