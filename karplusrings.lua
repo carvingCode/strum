@@ -185,7 +185,6 @@ function handle_step()
           -- Audio engine out
         if params:get("output") == 1 or params:get("output") == 3 then
                 engine.amp(vel)
-                print (position)
                 engine.hz(music.note_num_to_freq(scale[steps[position]] + transpose))
         end
         
