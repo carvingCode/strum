@@ -1,5 +1,6 @@
 -- 
--- Strum: plucky patterns
+-- Strum: plucky patterns 
+-- (Passersby engine)
 --
 -- "Full moon shines so bright
 --      Stars in its vicinity
@@ -58,7 +59,8 @@
 --
 
 
-engine.name = 'KarplusRings'
+engine.name = 'Passersby'
+local Passersby = require "passersby"
 
 local UI = require "ui"
 local cs = require 'controlspec'
@@ -77,7 +79,7 @@ local screen_refresh_metro
 local screen_dirty = true
 local pages
 
-local name = ":: Strum :: "
+local name = ":: Strum - Passersby :: "
 
 -- pattern vars
 local steps = {}
@@ -117,7 +119,9 @@ clk_midi.event = clk.process_midi
 local function all_notes_kill()
   
   -- Audio engine out
-  --engine.noteKillAll(). ??
+  if (params:get("output") == 1 or params:get("output") == 3) then
+    engine.noteOff(1)
+  end
   
   -- MIDI out
   if (params:get("output") == 2 or params:get("output") == 3) then
@@ -184,8 +188,8 @@ function handle_step()
           -- Audio engine out
         if params:get("output") == 1 or params:get("output") == 3 then
                 engine.amp(vel)
-                print (position)
-                engine.hz(music.note_num_to_freq(scale[steps[position]] + transpose))
+                --print (position)
+                engine.noteOn(1, music.note_num_to_freq(scale[steps[position]]), 1)
         end
         
             -- MIDI out
@@ -290,43 +294,7 @@ function init()
   
     params:add_separator()
 
-    cs.AMP = cs.new(0,1,'lin',0,0.5,'')
-    params:add_control("amp", "Amp", cs.AMP)
-    params:set_action("amp",
-        function(x) engine.amp(x) end)
-
-    cs.DECAY = cs.new(0.1,15,'lin',0,3.6,'s')
-    params:add_control("damping", "Damping", cs.DECAY)
-    params:set_action("damping",
-        function(x) engine.decay(x) end)
-
-    cs.COEF = cs.new(0.2,0.9,'lin',0,0.2,'')
-    params:add_control("brightness", "Brightness", cs.COEF)
-    params:set_action("brightness",
-        function(x) engine.coef(x) end)
-
-    cs.LPF_FREQ = cs.new(100,10000,'lin',0,4500,'')
-    params:add_control("lpf_freq", "LPF Freq", cs.LPF_FREQ)
-    params:set_action("lpf_freq",
-        function(x) engine.lpf_freq(x) end)
-
-    cs.LPF_GAIN = cs.new(0,3.2,'lin',0,0.5,'')
-    params:add_control("lpf_gain", "LPF Gain", cs.LPF_GAIN)
-    params:set_action("lpf_gain",
-        function(x) engine.lpf_gain(x) end)
-
-    cs.BPF_FREQ = cs.new(100,4000,'lin',0,0.5,'')
-    params:add_control("bpf_freq", "BPF Freq", cs.BPF_FREQ)
-    params:set_action("bpf_freq",
-        function(x) engine.bpf_freq(x) end)
-
-    cs.BPF_RES = cs.new(0,3,'lin',0,0.5,'')
-    params:add_control("bpf_res", "BPF Res", cs.BPF_RES)
-    params:set_action("bpf_res",
-        function(x) engine.bpf_res(x) end)
-
-    params:bang()
-
+    Passersby.add_params()
 	-- set up MIDI in
     midi_in_device.event = function(data)
     	clk:process_midi(data)
@@ -469,9 +437,9 @@ function redraw()
     
     screen.aa(1)
     screen.line_width(1)
-    screen.move(44,10)
+    screen.move(63,10)
     screen.level(5)
-    screen.text(name)
+    screen.text_center(name)
     screen.move(0,15)
     screen.line(127,15)
     screen.stroke()

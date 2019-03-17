@@ -1,7 +1,7 @@
 # Strum
 ## a plucky little pattern sequencer
 
-### For monome norns. Updated for norns v2.x.
+### For monome norns and grid. Updated for norns v2.0b1.
 
 "Full moon shines so bright, Stars in its vicinity, All but disappear"
 
