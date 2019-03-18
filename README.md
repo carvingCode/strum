@@ -3,7 +3,6 @@
 
 ### For monome norns and grid. Updated for norns v2.0b1.
 
-"Full moon shines so bright, Stars in its vicinity, All but disappear"
 
 Four (4) versions are available, each using a specific sound engine.  Depending on the needs of your music, you have sound engines to choose from.  The engines currently available are:
 - KarplusRings (pluck)
