@@ -51,11 +51,9 @@
 -- Various clock settings
 -- Synth params can be changed (beware the high ends!!!) -- Delay can be set using "cut1rate" (new)
 -- 
--- 
--- Based on norns study #4
--- 
+--
 -- @carvingcode (Randy Brown)
--- v0.8d_0314 (for v2.x)
+-- v0.8_0318 (for v2.x)
 --
 
 
@@ -86,13 +84,12 @@ local steps = {}
 local playchoice = 1
 local pattern_len = 16
 local position = 1
-local note_num = 60
+
 
 
 local note_playing = nil
 local prev_note = 0
 local next_step = 0
-local transpose = 0
 local direction = 1
 local k3_state = 0
 
@@ -103,10 +100,10 @@ local midi_out_device = midi.connect()
 local midi_out_channel
 
 -- scale vars
-local tonic = music.note_num_to_name(note_num, 1)
+local root_num = 60
+local tonic = music.note_num_to_name(root_num, 1)
 local mode = 5 -- set to dorian
-local scale = music.generate_scale_of_length(60,music.SCALES[mode].name,8)
---local scale = music.generate_scale(48,music.SCALES[mode].name,1)
+local scale = music.generate_scale_of_length(root_num,music.SCALES[mode].name,8)
 
 -- clock vars
 local clk = beatclock.new()
@@ -120,12 +117,12 @@ local function all_notes_kill()
   
   -- Audio engine out
   if (params:get("output") == 1 or params:get("output") == 3) then
-    engine.noteOff(1)
+    engine.noteOffAll()
   end
   
   -- MIDI out
   if (params:get("output") == 2 or params:get("output") == 3) then
-      midi_out_device:note_off(a, 96, midi_out_channel)
+      midi_out_device:note_off(1, note_num, midi_out_channel)
   end
   note_playing = nil
 end
@@ -184,11 +181,10 @@ function handle_step()
 
     if steps[position] ~= 0 then
         vel = math.random(1,100) / 100 -- random velocity values
-        
+
           -- Audio engine out
         if params:get("output") == 1 or params:get("output") == 3 then
                 engine.amp(vel)
-                --print (position)
                 engine.noteOn(1, music.note_num_to_freq(scale[steps[position]]), 1)
         end
         
@@ -197,7 +193,7 @@ function handle_step()
             if note_playing ~= nil then
                 midi_out_device:note_off(note_playing,nil)
             end
-            note_playing = music.freq_to_note_num(music.note_num_to_freq(scale[steps[position]] + transpose),1)
+            note_playing = music.freq_to_note_num(scale[steps[position]])
             midi_out_device:note_on(note_playing,vel*100)
         end
         
@@ -312,7 +308,8 @@ end
 -------------------------
 -- handle grid presses --
 -------------------------
-grid_device.key = function(x,y,z)
+
+function grid_device.key(x,y,z)
 
     if z == 1 then
         if steps[x] == y then
@@ -360,11 +357,8 @@ function key(n,z)
         if k3_state == 0 then
             clk:stop()
             k3_state = 1
-            
-            -- MIDI out
-            if (params:get("output") == 2 or params:get("output") == 3) then
-                all_notes_kill()
-            end
+            all_notes_kill()
+
             -- clear grid lights
             grid_device:all(0)
             grid_device:refresh()
@@ -393,13 +387,13 @@ function enc(n,delta)
         
         if n == 2 then       -- scale
             mode = util.clamp(mode + delta, 1, #music.SCALES)
-            scale = music.generate_scale_of_length(note_num,music.SCALES[mode].name,8)
+            scale = music.generate_scale_of_length(root_num,music.SCALES[mode].name,8)
 
         elseif n == 3 then	-- tonic
 	        
-            note_num = util.clamp(note_num + delta, 24, 96)
-            tonic = music.note_num_to_name(note_num, 1)
-            scale = music.generate_scale_of_length(note_num,music.SCALES[mode].name,8)
+            root_num = util.clamp(root_num + delta, 24, 96)
+            tonic = music.note_num_to_name(root_num, 1)
+            scale = music.generate_scale_of_length(root_num,music.SCALES[mode].name,8)
                 
         end
         
