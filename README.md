@@ -1,14 +1,7 @@
 # Strum
 ## a plucky little pattern sequencer
 
-### For monome norns and grid. Updated for norns v2.0b1.
-
-
-Four (4) versions are available, each using a specific sound engine.  Depending on the needs of your music, you have sound engines to choose from.  The engines currently available are:
-- KarplusRings (pluck)
-- PolyPerc (polyperc)
-- MollyThePoly (molly)
-- Passersby (passersby)
+### For monome norns and grid. Updated for norns v2
 
 ## grid Controls
 
@@ -21,23 +14,27 @@ Dividied into pages (new)
 
 - ENC 1: chooses page
 
-### Page 1
+### Page 1 (sound)
 
 - ENC 2: sets scale
 - ENC 3: sets tonic (new)
 
-### Page 2
+### Page 2 (pattern)
 
 - ENC 2: adjusts direction
+- ALT (KEY 1) + ENC 2: sets pattern length
 - ENC 3: adjusts tempo
 
-### Page 3
+### Page 3 (storage)
 
-- ENC 2: sets pattern length (new)
+- ENC 2: scroll thru list
+- ENC 3: scroll to Load/Save/Delete
+- KEY 3: select option from ENC 3
+- KEY 2: back out of a selection
 
 ### Keys
-- KEY 1: param and system menus
-- KEY 2: randomizes pattern
+- KEY 1: param and system menus (hold for ALT)
+- ALT + KEY 2: randomizes pattern
 - KEY 3: pauses/restarts
 
 ## MIDI
@@ -49,12 +46,12 @@ Dividied into pages (new)
 
 - Grid display: scatter or bar
 - Set grid and MIDI device
-- Set grid rotation (new)
+- Set grid rotation
 - Set MIDI channel
 - Various clock settings
 - Synth params can be changed (beware the high ends!!!)
--- Delay can be set using "cut1rate" (new)
+
 
 ###Note:
 
-Feedback on performance and improvements and enhancements is welcome.  Please contact me @carvingcode at https://llllllll.co
+Feedback is welcome. @carvingcode at https://llllllll.co
