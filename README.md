@@ -10,14 +10,14 @@
 
 ## norns Controls
 
-Dividied into pages (new)
+Dividied into pages
 
 - ENC 1: chooses page
 
 ### Page 1 (sound)
 
 - ENC 2: sets scale
-- ENC 3: sets tonic (new)
+- ENC 3: sets tonic
 
 ### Page 2 (pattern)
 
@@ -39,7 +39,7 @@ Dividied into pages (new)
 
 ## MIDI
 
-- MIDI IN: clock sync (new)
+- MIDI IN: clock sync
 - MIDI OUT: to external synths
 
 ## Param Settings
