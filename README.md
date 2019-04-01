@@ -32,6 +32,8 @@ Dividied into pages
 - KEY 3: select option from ENC 3
 - KEY 2: back out of a selection
 
+### Note: Saves patterns and settings, plus synth params.
+
 ### Keys
 - KEY 1: param and system menus (hold for ALT)
 - ALT + KEY 2: randomizes pattern
@@ -52,6 +54,6 @@ Dividied into pages
 - Synth params can be changed (beware the high ends!!!)
 
 
-###Note:
+### Note:
 
-Feedback is welcome. @carvingcode at https://llllllll.co
+Feedback welcome. Contact @carvingcode at https://llllllll.co
