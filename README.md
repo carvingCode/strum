@@ -1,7 +1,7 @@
 # Strum
 ## a plucky little pattern sequencer
 
-### For monome norns and grid. Updated for norns v2
+### For monome norns and grid. Updated for norns v2.
 
 ## grid Controls
 
