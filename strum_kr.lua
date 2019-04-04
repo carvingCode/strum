@@ -5,6 +5,7 @@
 --      Stars in its vicinity
 --          All but disappear"
 --
+-- KarplusRings version
 --
 -- Documentation and 
 -- updates at:
