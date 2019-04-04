@@ -1,23 +1,10 @@
--- 
--- Strum: plucky patterns
---
--- "Full moon shines so bright
---      Stars in its vicinity
---          All but disappear"
---
--- KarplusRings version
---
--- Documentation and 
--- updates at:
---
--- https://github.com/
--- carvingCode/strum
---
--- v1.0 (033019)
---
+-- scriptname: Strum
+-- v1.0.0 @carvingcode
+-- https://llllllll.co/t/strum/21025
 
-
-
+--
+-- vars
+--
 engine.name = 'KarplusRings'
 
 local UI = require "ui"
