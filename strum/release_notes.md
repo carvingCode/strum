@@ -15,3 +15,4 @@ initial release
 ## Plans
 
 - Change method of loading/saving/deleting patterns
+- Add versions for additional sound engines
