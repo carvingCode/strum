@@ -5,7 +5,7 @@
 
 Two versions.  One uses the KarplusRings engine for string-like ring and pluck.  The other uses PolyPerc for a ringing delay tone.
 
-## Installtion
+## Install
 
 - Download and unpack
 - Copy 'strum' folder to your norns in the 'code' folder.
