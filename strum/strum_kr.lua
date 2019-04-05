@@ -1,3 +1,9 @@
+--
+-- The strum of your chords,
+--   Sways my soul 
+--     back and fourth. 
+--
+--
 -- scriptname: Strum
 -- v1.0.0 @carvingcode
 -- https://llllllll.co/t/strum/21025
