@@ -1,4 +1,3 @@
-
 --
 -- The strum of your chords,
 --   Sways my soul 
