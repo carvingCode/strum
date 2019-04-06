@@ -1,7 +1,7 @@
 # Strum
 ## a plucky little pattern sequencer
 
-### For monome norns v2and grid 128.
+### For monome norns v2 and grid 128.
 
 Two versions.  One uses the KarplusRings engine for string-like ring and pluck.  The other uses PolyPerc for a ringing delay tone.
 
