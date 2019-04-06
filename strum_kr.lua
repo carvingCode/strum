@@ -22,7 +22,7 @@ local beatclock = require 'beatclock'
 local playmode = {"Onward","Aft", "Sway", "Joy"}
 local out_options = {"Audio", "MIDI", "Audio + MIDI"}
 local grid_display_options = {"Normal", "180 degrees"}
-local DATA_FILE_PATH = _path.data .. "ccode/strum/strum.data"
+local DATA_FILE_PATH = _path.data .. "ccode/strum/strum_kr.data"
 
 -- vars for UI
 local SCREEN_FRAMERATE = 15
