@@ -188,7 +188,7 @@ end
 local function all_notes_kill()
     
   -- MIDI out
-  midi_out_device:note_off(note_playing, nil)
+  midi_out_device:note_off(note_playing, nil, midi_out_channel)
   note_playing = nil
 end
 
@@ -253,10 +253,10 @@ function handle_step()
             -- MIDI out
         if (params:get("output") == 2 or params:get("output") == 3) then
             if note_playing ~= nil then
-                midi_out_device:note_off(note_playing,nil)
+                midi_out_device:note_off(note_playing,nil, midi_out_channel)
             end
             note_playing = music.freq_to_note_num(music.note_num_to_freq(scale[steps[position]]),1)
-            midi_out_device:note_on(note_playing,vel*100)
+            midi_out_device:note_on(note_playing,vel*100, midi_out_channel)
         end
         
     end
